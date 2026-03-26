@@ -127,3 +127,23 @@ def test_invalid_number_of_selected_choices():
     question.set_correct_choices([3])
     with pytest.raises(Exception):
         correct_choices = question.correct_selected_choices([1,2])
+
+@pytest.fixture
+def question():
+    question = Question(title='q1', max_selections=2)
+    question.add_choice('a')
+    question.add_choice('b')
+    question.add_choice('c')
+    question.add_choice('d')
+    return question
+
+def test_correct_selected_choices_with_zero_choices_right(question):
+    question.set_correct_choices([1,2])
+    correct_choices = question.correct_selected_choices([3,4])
+    assert correct_choices == []
+
+def test_changing_text_of_the_choice(question):
+    question.choices[0].text = "1"
+    assert len(question.choices) == 4
+    assert question.choices[0].text == '1'
+    assert not question.choices[0].is_correct 
